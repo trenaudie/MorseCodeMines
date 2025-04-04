@@ -45,16 +45,17 @@
       "args": [
         "-std=c++17",
         "-g",
-        "-I${workspaceFolder}/FFT-cpp",
-        "-I${workspaceFolder}/FFT-cpp/include",
+        "-I.",
         "-o",
         "${fileBasenameNoExtension}",
         "${file}",
-        "${workspaceFolder}/FFT-cpp/src/FFT.cpp"
+        "${workspaceFolder}/fft_copied/kiss_fft.c",
+        "${workspaceFolder}/fft_copied/kiss_fftr.c",
+
       ],
       "group": {
         "kind": "build",
-        "isDefault": false
+        "isDefault": true
       },
       "problemMatcher": ["$gcc"]
     },
@@ -77,7 +78,7 @@
       ],
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": false
       },
       "dependsOn": ["cmake configure"],
       "problemMatcher": ["$gcc"]

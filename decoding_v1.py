@@ -47,6 +47,55 @@ frequencies = np.fft.fftfreq(len(fft_values), 1/sample_rate)
 plt.plot(frequencies, fft_values)
 #%%
 plt.plot(frequencies[:len(frequencies)//20], fft_values[:len(fft_values)//20])
+
+#%%
+
+
+
+def dft(arr:np.ndarray):
+    """
+    Compute the Discrete Fourier Transform (DFT) of a signal by hand.
+    """
+    from tqdm import tqdm
+    N = len(arr)
+    dft_values = np.zeros(N, dtype=complex)
+    for k in tqdm(range(N)):
+        for n in range(N):
+            dft_values[k] += arr[n] * np.exp(-2j * np.pi * k * n / N)
+    return dft_values
+
+
+#%% 
+non_null_index = 0 
+while non_null_index < len(values) -1 : # keep moving the non_null_index until we find a non null value that satisfies the right range
+    print(non_null_index)
+    while values[non_null_index] == 0:
+        non_null_index += 1
+    # update the range end
+    range_end = non_null_index + 1
+    while values[range_end] != 0 or values[range_end +1] != 0:
+        range_end += 1
+        print(f'range: {range_end- non_null_index}')
+    if range_end - non_null_index > 1000:
+        print(f'breaking because minimum range is reached: {range_end - non_null_index}')
+        break 
+    if values[range_end] == 0 and values[range_end+1] == 0:
+        print(f'found an empty signal at index {non_null_index}')
+        non_null_index = range_end + 1
+        continue
+
+#%%
+assert range_end - non_null_index > 999
+values_sinusoidal = values[non_null_index+1 : range_end - 1][:3000]
+dft_values = dft(values_sinusoidal)
+frequencies = np.fft.fftfreq(len(dft_values), 1/sample_rate)
+idx = np.argsort(np.abs(dft_values))[-10:]
+print(frequencies[idx]) 
+major_frequency = frequencies[idx[-1]]
+print(f'top frequency: {major_frequency}')
+
+#%%
+
 #%% 
 # top10 fft_values, frequencies pairs  
 top10 = np.argsort(fft_values[:len(fft_values)//20])[-10:]

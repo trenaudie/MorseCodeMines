@@ -67,7 +67,8 @@
         "concepts": "cpp",
         "algorithm": "cpp",
         "iterator": "cpp",
-        "dense": "cpp"
+        "dense": "cpp",
+        "kiss_fft_log.h": "c"
     },
     "cmake.configureOnOpen": true,
     "cmake.buildDirectory": "${workspaceFolder}/build",
