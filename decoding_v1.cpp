@@ -6,9 +6,6 @@
 #include <algorithm>
 #include <numeric>
 
-#include "fft_copied/kiss_fft.h"
-#include "fft_copied/kiss_fftr.h" // Include if you need real FFTs
-
 
 // Windowed normalization function (translated from Python)
 std::vector<float> windowed_normalization(const std::vector<float> &values,
@@ -433,5 +430,8 @@ int main()
     // For Morse code analysis, this frequency might be the carrier tone
     std::cout << "This frequency is likely the carrier tone for the Morse code." << std::endl;
     
+    
+
+
     return 0;
 }

@@ -19,7 +19,9 @@
         "kind": "build",
         "isDefault": false
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": [
+        "$gcc"
+      ]
     },
     {
       "label": "build current file with c++20",
@@ -34,9 +36,11 @@
       ],
       "group": {
         "kind": "build",
-        "isDefault": false
+        "isDefault": true
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": [
+        "$gcc"
+      ]
     },
     {
       "label": "build current file with c++20 and FFT",
@@ -50,20 +54,26 @@
         "${fileBasenameNoExtension}",
         "${file}",
         "${workspaceFolder}/fft_copied/kiss_fft.c",
-        "${workspaceFolder}/fft_copied/kiss_fftr.c",
-
+        "${workspaceFolder}/fft_copied/kiss_fftr.c"
       ],
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": false
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": [
+        "$gcc"
+      ]
     },
     {
       "label": "cmake configure",
       "type": "shell",
       "command": "cmake",
-      "args": ["-S", "${workspaceFolder}", "-B", "${workspaceFolder}/build"],
+      "args": [
+        "-S",
+        "${workspaceFolder}",
+        "-B",
+        "${workspaceFolder}/build"
+      ],
       "problemMatcher": []
     },
     {
@@ -80,16 +90,27 @@
         "kind": "build",
         "isDefault": false
       },
-      "dependsOn": ["cmake configure"],
-      "problemMatcher": ["$gcc"]
+      "dependsOn": [
+        "cmake configure"
+      ],
+      "problemMatcher": [
+        "$gcc"
+      ]
     },
     {
       "label": "cmake build all",
       "type": "shell",
       "command": "cmake",
-      "args": ["--build", "${workspaceFolder}/build"],
-      "dependsOn": ["cmake configure"],
-      "problemMatcher": ["$gcc"]
+      "args": [
+        "--build",
+        "${workspaceFolder}/build"
+      ],
+      "dependsOn": [
+        "cmake configure"
+      ],
+      "problemMatcher": [
+        "$gcc"
+      ]
     }
   ]
 }
