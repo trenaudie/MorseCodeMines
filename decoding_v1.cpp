@@ -5,6 +5,7 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
+#include "utils.h"
 
 
 // Windowed normalization function (translated from Python)
@@ -446,7 +447,7 @@ int main()
     
     std::vector<int> signal_or_blank;
     int blank_counter = 0;
-    int blank_threshold = num_points_sinewave * 20; // 20 wavelengths (as in Python comment)
+    int blank_threshold = num_points_sinewave * 20; // 20 wavelengths
     
     std::cout << "labelling a range of values as signal-OFF if the number of consecutive null samples exceeds " 
               << blank_threshold << std::endl;
@@ -486,6 +487,7 @@ int main()
             }
         }
     }
+    print_vector(signal_or_blank, "Signal or Blank", 100);
     // Print statistics about signal_or_blank
     int ones_count = std::count(signal_or_blank.begin(), signal_or_blank.end(), 1);
     int zeros_count = std::count(signal_or_blank.begin(), signal_or_blank.end(), 0);
@@ -493,7 +495,63 @@ int main()
     std::cout << "  Total points: " << signal_or_blank.size() << std::endl;
     std::cout << "  Signal points (1): " << ones_count << std::endl;
     std::cout << "  Blank points (0): " << zeros_count << std::endl;
+    // Add this after the signal_or_blank processing section in main()
 
+    // Analyze signal blocks and durations
+    std::vector<int> durations;
+    std::vector<int> block_values;
+    size_t ptr = 0;
+    int current_value = signal_or_blank[0];
+    int num_conseq = 0;
+
+    while (ptr < signal_or_blank.size() - 1) {
+        ptr++;
+        if (signal_or_blank[ptr] == current_value) {
+            num_conseq++;
+        } else {
+            block_values.push_back(current_value);
+            durations.push_back(num_conseq);
+            num_conseq = 0;
+            current_value = signal_or_blank[ptr];
+            num_conseq++;
+        }
+    }
+    durations.push_back(num_conseq);
+    block_values.push_back(current_value);
+
+    // Print information about the blocks
+    std::cout << "\nDetected " << durations.size() << " blocks of signals/blanks" << std::endl;
+    std::cout << "First few blocks:" << std::endl;
+    int display_limit = std::min(10, static_cast<int>(durations.size()));
+    for (int i = 0; i < display_limit; i++) {
+        std::cout << "  Block " << i << ": value=" << block_values[i] 
+                << ", duration=" << durations[i] << std::endl;
+    }
+
+    // Find the minimum duration (unit length)
+    int min_duration = *std::min_element(durations.begin(), durations.end());
+    std::cout << "\nMinimum duration (unit length): " << min_duration << std::endl;
+
+    // Calculate the number of unit lengths for each duration
+    std::vector<int> num_unit_lens;
+    for (int duration : durations) {
+        float ratio = static_cast<float>(duration) / min_duration;
+        int rounded = std::round(ratio);
+        num_unit_lens.push_back(rounded);
+    }
+    print_vector(num_unit_lens, "Number of unit lengths", 100);
+
+    // Find unique unit lengths (should be 3 or 4)
+    std::set<int> unique_unit_lens(num_unit_lens.begin(), num_unit_lens.end());
+    std::cout << "Number of unique unit lengths: " << unique_unit_lens.size() << std::endl;
+    std::cout << "Unique unit lengths: ";
+    for (int len : unique_unit_lens) {
+        std::cout << len << " ";
+    }
+    std::cout << std::endl;
+
+
+ 
     // signal_or_blank = []
     // blank_counter = 0
     // blank_threshold = 80 * 20 # 20 wavelengths ie negligible, but safer than 2
