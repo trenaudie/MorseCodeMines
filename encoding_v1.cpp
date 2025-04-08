@@ -459,18 +459,25 @@ void writeWavHeader(std::ofstream &file, const std::vector<float> &v, int sample
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    // input pararms
-    const std::string message = "hi in";
+    // Parse command line arguments
+    std::string message = "hello world";  // Default message
+    
+    if (argc > 1) {
+        // If command line argument is provided, use it as the message
+        message = argv[1];
+    } else {
+        std::cout << "No message provided. Using default: \"" << message << "\"" << std::endl;
+        std::cout << "Usage: " << argv[0] << " \"message to encode\"" << std::endl;
+    }
+    
     const ggmorse_SampleFormat sample_format = MORSE_SAMPLE_FORMAT_F32;
     const int speed_wpm = 10;
     const int sample_rate_out = 44100;
     const int sample_rate_in = 44100;
     auto v = encoding(message, sample_format, speed_wpm, sample_rate_out);
     std::cout << "Encoded message! " << message << std::endl;
-
-    // saving the vector itself
     std::cout << "Saving the vector to a file" << std::endl;
     std::ofstream outFile("morse_output.txt");
     for (const auto &sample : v)
@@ -478,9 +485,9 @@ int main()
         outFile << sample << "\n";
     }
     outFile.close();
-    std::cout << "Vector saved to morse_output.txt" << std::endl;
-
-    std::ofstream wavFile("temp_out.wav", std::ios::binary);
+    std::string wavfilename = "encoding_out.wav";
+    std::ofstream wavFile(wavfilename, std::ios::binary);
+    std::cout << "Vector saved to "<< wavfilename << std::endl;
     writeWavHeader(wavFile, v, sample_rate_out, 1, 16);
     return 0;
 }
