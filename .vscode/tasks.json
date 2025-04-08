@@ -19,9 +19,7 @@
         "kind": "build",
         "isDefault": false
       },
-      "problemMatcher": [
-        "$gcc"
-      ]
+      "problemMatcher": ["$gcc"]
     },
     {
       "label": "build current file with c++20",
@@ -32,15 +30,14 @@
         "-g",
         "-o",
         "${fileBasenameNoExtension}",
-        "${file}"
+        "${file}",
+        "${workspaceFolder}/utils.cpp"
       ],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": [
-        "$gcc"
-      ]
+      "problemMatcher": ["$gcc"]
     },
     {
       "label": "build current file with c++20 and FFT",
@@ -60,20 +57,13 @@
         "kind": "build",
         "isDefault": false
       },
-      "problemMatcher": [
-        "$gcc"
-      ]
+      "problemMatcher": ["$gcc"]
     },
     {
       "label": "cmake configure",
       "type": "shell",
       "command": "cmake",
-      "args": [
-        "-S",
-        "${workspaceFolder}",
-        "-B",
-        "${workspaceFolder}/build"
-      ],
+      "args": ["-S", "${workspaceFolder}", "-B", "${workspaceFolder}/build"],
       "problemMatcher": []
     },
     {
@@ -90,27 +80,16 @@
         "kind": "build",
         "isDefault": false
       },
-      "dependsOn": [
-        "cmake configure"
-      ],
-      "problemMatcher": [
-        "$gcc"
-      ]
+      "dependsOn": ["cmake configure"],
+      "problemMatcher": ["$gcc"]
     },
     {
       "label": "cmake build all",
       "type": "shell",
       "command": "cmake",
-      "args": [
-        "--build",
-        "${workspaceFolder}/build"
-      ],
-      "dependsOn": [
-        "cmake configure"
-      ],
-      "problemMatcher": [
-        "$gcc"
-      ]
+      "args": ["--build", "${workspaceFolder}/build"],
+      "dependsOn": ["cmake configure"],
+      "problemMatcher": ["$gcc"]
     }
   ]
 }

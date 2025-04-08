@@ -5,6 +5,8 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
+#include <set>
+#include <map>
 #include "utils.h"
 
 
@@ -389,6 +391,73 @@ void remove_end_blanks(std::vector<float>& values)
 }
 
 
+// Define Morse code dictionary
+std::map<std::string, char> morse_dict = {
+    {".-", 'A'}, {"-...", 'B'}, {"-.-.", 'C'}, {"-..", 'D'}, {".", 'E'},
+    {"..-.", 'F'}, {"--.", 'G'}, {"....", 'H'}, {"..", 'I'}, {".---", 'J'},
+    {"-.-", 'K'}, {".-..", 'L'}, {"--", 'M'}, {"-.", 'N'}, {"---", 'O'},
+    {".--.", 'P'}, {"--.-", 'Q'}, {".-.", 'R'}, {"...", 'S'}, {"-", 'T'},
+    {"..-", 'U'}, {"...-", 'V'}, {".--", 'W'}, {"-..-", 'X'}, {"-.--", 'Y'},
+    {"--..", 'Z'}, {"-----", '0'}, {".----", '1'}, {"..---", '2'}, {"...--", '3'},
+    {"....-", '4'}, {".....", '5'}, {"-....", '6'}, {"--...", '7'}, {"---..", '8'},
+    {"----.", '9'}, {".-.-.-", '.'}, {"--..--", ','}, {"..--..", '?'}, {".----.", '\''},
+    {"-.-.--", '!'}, {"-..-.", '/'}, {"-.--.", '('}, {"-.--.-", ')'}, {".-...", '&'},
+    {"---...", ':'}, {"-.-.-.", ';'}, {"-...-", '='}, {".-.-.", '+'}, {"-....-", '-'},
+    {"..--.-", '_'}, {".-..-.", '"'}, {"...-..-", '$'}, {".--.-.", '@'}
+};
+
+std::string decoding(std::string symbols) {
+    // example
+    // std::string symbols = ".... . .-.. .-.. --- / .-- --- .-. .-.. -.."; //HELLO WORLD
+    int ptr = 0; // position in the symbols string
+    std::string decoded_text = "";
+    std::string buffer = "";
+    
+    // Fixed issues:
+    // 1. Cannot use find() on a vector with a char
+    // 2. Need to increment ptr
+    // 3. Need to handle end of string
+    
+    std::cout << "Morse code to decode: " << symbols << std::endl;
+    
+    while (ptr < symbols.size()) {
+        char ptr_char = symbols[ptr];
+        
+        // Check if the current character is a space or slash
+        if (ptr_char == ' ' || ptr_char == '/') {
+            // If buffer is not empty, decode it
+            if (!buffer.empty()) {
+                if (morse_dict.find(buffer) != morse_dict.end()) {
+                    decoded_text += morse_dict[buffer];
+                } else {
+                    decoded_text += "[" + buffer + "]";
+                }
+                buffer = "";
+            }
+            
+            // If it's a slash, add a space to represent word break
+            if (ptr_char == '/') {
+                decoded_text += " ";
+            }
+        } else {
+            // Add the character to the buffer
+            buffer += ptr_char;
+        }
+        
+        // Increment pointer to move to next character
+        ptr++;
+    }
+    
+    // Handle any remaining buffer at the end
+    if (!buffer.empty()) {
+        if (morse_dict.find(buffer) != morse_dict.end()) {
+            decoded_text += morse_dict[buffer];
+        } else {
+            decoded_text += "[" + buffer + "]";
+        }
+    }    
+    return decoded_text;
+}
 
 
 int main()
@@ -549,31 +618,42 @@ int main()
         std::cout << len << " ";
     }
     std::cout << std::endl;
+    // Sort the unique unit lengths
+    std::vector<int> sorted_unique_unit_lens(unique_unit_lens.begin(), unique_unit_lens.end());
+    std::sort(sorted_unique_unit_lens.begin(), sorted_unique_unit_lens.end());
+
+    int len_unit = sorted_unique_unit_lens[0]; // The smallest unit length
+    int len_letter_space_or_dash = sorted_unique_unit_lens[1]; // The second smallest unit length
+    int len_word_space = sorted_unique_unit_lens[-1]; // The largest unit length 
+
+    // Generate the Morse code symbols
+    std::string symbols1 = "";
+    for (size_t i = 0; i < num_unit_lens.size(); i++) {
+        int block = num_unit_lens[i];
+        int block_value = block_values[i];
+        
+        if (block == len_unit) {
+            if (block_value == 1) {
+                symbols1 += ".";
+            }
+            // If block_value is 0, add nothing (as in Python)
+        }
+        else if (block == len_letter_space_or_dash) {
+            if (block_value == 1) {
+                symbols1 += "-";
+            }
+            else {
+                symbols1 += " ";
+            }
+        }
+        else if (block == len_word_space && block_value == 0) {
+            symbols1 += "/";
+        }
+    }
+    std::cout << "Morse symbols found: " << symbols1 << std::endl;
 
 
- 
-    // signal_or_blank = []
-    // blank_counter = 0
-    // blank_threshold = 80 * 20 # 20 wavelengths ie negligible, but safer than 2
-    // for i in range(len(above_threshold_noend)):
-    //     if above_threshold_noend[i] == 1:
-    //         if blank_counter == 0:
-    //             signal_or_blank.append(1)
-    //         else: 
-    //             blank_counter +=1 
-    //             if blank_counter > blank_threshold:
-    //                 signal_or_blank.extend([0] * blank_counter)
-    //             else:
-    //                 signal_or_blank.extend([1] * blank_counter)
-    //         blank_counter = 0
-    //     elif above_threshold_noend[i] == 0:
-    //         blank_counter += 1
-    // if blank_counter > blank_threshold:
-    //     signal_or_blank.extend([0] * blank_counter)
-    // else:
-    //     signal_or_blank.extend([1] * blank_counter)
-    
-
-
+    std::string decoded_text = decoding(symbols1);
+    std::cout << "Decoded text: " << decoded_text << std::endl;
     return 0;
 }
