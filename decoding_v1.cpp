@@ -460,11 +460,19 @@ std::string decoding(std::string symbols) {
 }
 
 
-int main()
+int main(int argc, char *argv[])
 {
+    // Default WAV file name
     std::string filename = "morse_code.wav";
-
-    // std::vector<float>, audio_data = open_wav(filename);
+    
+    // Check if filename was provided as command line argument
+    if (argc > 1) {
+        filename = argv[1];
+    } else {
+        std::cout << "No input file specified. Using default: " << filename << std::endl;
+        std::cout << "Usage: " << argv[0] << " <input_wav_file>" << std::endl;
+    }
+    
     std::vector<float> audio_data;
     float sample_rate = 0.0f;
     std::tie(audio_data, sample_rate) = open_wav(filename);
@@ -516,7 +524,7 @@ int main()
     
     std::vector<int> signal_or_blank;
     int blank_counter = 0;
-    int blank_threshold = num_points_sinewave * 20; // 20 wavelengths
+    int blank_threshold = num_points_sinewave * 20; 
     
     std::cout << "labelling a range of values as signal-OFF if the number of consecutive null samples exceeds " 
               << blank_threshold << std::endl;
