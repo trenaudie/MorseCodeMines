@@ -89,12 +89,12 @@ short value = *(short*)buffer;
 float normalized = value / 32768.0f;
 ```
 
-**Measuring ON/OFF durations**
+**2. Measuring ON/OFF durations**
 
 To accurately measure the durations of each ON/OFF segment of the audio file, we used a threshold of 20 wavelengths minimum of OFF signal, to label the segment as OFF. This allowed us to maintain the segment's as ON in the case of a sinusoidal signal where some points have low amplitudes. 
 To determine the duration of a wavelength, we adapted a simple DFT algorithm. We assumed in doing so that the signal was a simple sinusoidal signal.
 
-**Determining Beep Ratios**
+**3. Determining Beep Ratios**
 
 We sort the segment durations into 3 categories using a simple rounding arithmetic (kmeans clustering was attempted, but deemed too complex for this task).
 Category 1 : short beeps - the dot and the space between beeps 
