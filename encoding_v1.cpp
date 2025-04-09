@@ -285,6 +285,7 @@ std::vector<float> encoding(std::string message, ggmorse_SampleFormat sample_for
     int nsamples_unit_space = nsamples_unit;
     int nsamples_letter_space = 3.0f * nsamples_unit_space;
     int nsamples_word_space = 7.0f * nsamples_unit_space;
+    std::cout << "Encoding message: " << message << std::endl;
     for (int i = 0; i < message.size(); ++i)
     {
         if (message[i] == ' ')
@@ -293,7 +294,7 @@ std::vector<float> encoding(std::string message, ggmorse_SampleFormat sample_for
         }
         for (const auto &l : MorseCode)
         {
-            if (std::tolower(l.second) == message[i])
+            if (std::tolower(l.second) == std::tolower(message[i]))
             {
                 std::cout << "found " << message[i] << std::endl;
                 // letter found, lets add it to the symbols stack
@@ -479,12 +480,6 @@ int main(int argc, char *argv[])
     auto v = encoding(message, sample_format, speed_wpm, sample_rate_out);
     std::cout << "Encoded message! " << message << std::endl;
     std::cout << "Saving the vector to a file" << std::endl;
-    std::ofstream outFile("morse_output.txt");
-    for (const auto &sample : v)
-    {
-        outFile << sample << "\n";
-    }
-    outFile.close();
     std::string wavfilename = "encoding_out.wav";
     std::ofstream wavFile(wavfilename, std::ios::binary);
     std::cout << "Vector saved to "<< wavfilename << std::endl;

@@ -9,27 +9,13 @@ We provide the following examples:
 
 - Encoding a sample Latin-alphabet string of words such as "Hello World" and saving it to disk as a .WAV file.  
   Video located at `demo/encoding_demo.mov`
-    ![Alt Text](demo/encoding_demo_trimmed.gif)
+    ![Alt Text](demo/encoding_demo.gif)
 
-<!-- 
-    <p align="center">
-        <a href="demo/encoding_demo.mov">
-        <img src="demo/encoding_demo_trimmed.png" alt="Encoding Demo - Click to play" width="600"/>
-        </a>
-        <br>
-        <i>Click image to play the encoding demo video</i>
-    </p> -->
 
 - Decoding a morse code, saved locally in a .WAV file, into a Latin-alphabet string of words.  
   Video located at `demo/decoding_demo.mov`
+    ![Alt Text](demo/decoding_demo.gif)
 
-    <p align="center">
-    <a href="demo/decoding_demo.mov">
-        <img src="https://github.com/trenaudie/MorseCodeMines/raw/main/demo/decoding_demo.mov?raw=true#gh-light-mode-only" alt="Decoding Demo - Click to play" width="600"/>
-    </a>
-    <br>
-    <i>Click image to play the decoding demo video</i>
-    </p>
 
 ## Running the tests
 
